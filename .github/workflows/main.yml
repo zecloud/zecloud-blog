@@ -1,0 +1,34 @@
+name: CI
+
+on: [push, repository_dispatch]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Setup Node.js for use with actions
+      uses: actions/setup-node@v1.1.0
+    - name: Install dependencies
+      run: yarn install --prod --pure-lockfile
+    - name: Build Gatsby Site
+      uses: jzweifel/gatsby-cli-github-action@master
+      env:
+          GHOST_API_URL: "https://ghostzecloud.azurewebsites.net"
+          GHOST_CONTENT_API_KEY: ${{ secrets.GHOST_CONTENT_API_KEY }}
+      with:
+        gatsby-arg: build
+    - name: GitHub Push
+      uses: ad-m/github-push-action@v0.5.0
+      with:
+        # Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.GH_TOKEN }}
+        # Repository name to push. Default or empty value represents current github repository (${GITHUB_REPOSITORY})
+        repository: zecloud.github.io
+        # Directory to change to before pushing.
+        directory: public
+    
