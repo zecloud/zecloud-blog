@@ -31,4 +31,5 @@ jobs:
         repository: zecloud/zecloud.github.io
         # Directory to change to before pushing.
         directory: public
+        force: true 
     
