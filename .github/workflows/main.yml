@@ -22,13 +22,11 @@ jobs:
           GHOST_CONTENT_API_KEY: ${{ secrets.GHOST_CONTENT_API_KEY }}
       with:
         gatsby-arg: build
-    - name: GitHub Push
-      uses: ad-m/github-push-action@v0.5.0
-      with:
-        # Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}
-        github_token: ${{ secrets.GH_TOKEN }}
-        # Repository name to push. Default or empty value represents current github repository (${GITHUB_REPOSITORY})
-        repository: zecloud.github.io
-        # Directory to change to before pushing.
-        directory: public
+    - name: Deploy
+      uses: s0/git-publish-subdir-action@master
+      env:
+        REPO: git@github.com:zecloud/zecloud.github.io.git
+        BRANCH: master
+        FOLDER: public
+        SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY}}
     
