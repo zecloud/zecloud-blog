@@ -189,6 +189,13 @@ module.exports = {
               // replace "UA-XXXXXXXXX-X" with your own Tracking ID
               trackingId: "UA-7283278-1",
             },
+          }
+          ,
+          {
+            resolve: `gatsby-plugin-disqus`,
+            options: {
+              shortname: `zecloud-1`
+            }
           },
     ],
 }
