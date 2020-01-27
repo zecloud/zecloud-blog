@@ -16,7 +16,6 @@ import { Disqus, CommentCount } from 'gatsby-plugin-disqus'
 const Post = ({ data, location }) => {
     const post = data.ghostPost
     let disqusConfig = {
-        url: `${config.siteUrl+location.pathname}`,
         identifier: post.id,
         title: post.title,
       }
