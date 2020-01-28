@@ -2,11 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import Helmet from 'react-helmet'
-
+import url from 'url'
+import config from '../utils/siteConfig'
 import { Layout } from '../components/common'
 import { MetaData } from '../components/common/meta'
 import { Disqus, CommentCount } from 'gatsby-plugin-disqus'
-
+import {ShareButtons } from '../components/ShareButton'
 /**
 * Single post view (/:slug)
 *
@@ -16,6 +17,7 @@ import { Disqus, CommentCount } from 'gatsby-plugin-disqus'
 const Post = ({ data, location }) => {
     const post = data.ghostPost
     let disqusConfig = {
+        ur:url.resolve(config.siteUrl, location.pathname),
         identifier: post.id,
         title: post.title,
       }
@@ -37,6 +39,8 @@ const Post = ({ data, location }) => {
                                 <img src={ post.feature_image } alt={ post.title } />
                             </figure> : null }
                         <CommentCount config={disqusConfig} placeholder={'...'} />
+                       <ShareButtons twitterHandle="aymericw" url={url.resolve(config.siteUrl, location.pathname)} title={post.title} />
+                        
                         <section className="post-full-content">
                             <h1 className="content-title">{post.title}</h1>
 
