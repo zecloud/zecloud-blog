@@ -543,7 +543,8 @@ h6 {
 }
 
 .post-full-content {
-    max-width: 720px;
+    padding: 70px 100px;
+    max-width: 920px;
     margin: 0 auto;
     background: #fff;
     position: relative;
@@ -554,11 +555,7 @@ h6 {
       @media (max-width: 800px) {
         font-size: 1.9rem;
       }
-
-   
-    
 }
-
   
 .post-feature-image {
     margin: 0 -10vw -165px;
