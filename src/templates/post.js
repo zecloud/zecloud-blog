@@ -8,6 +8,8 @@ import { Layout } from '../components/common'
 import { MetaData } from '../components/common/meta'
 import { Disqus, CommentCount } from 'gatsby-plugin-disqus'
 import {ShareButtons } from '../components/ShareButton'
+import Img from 'gatsby-image';
+import { get } from 'lodash';
 /**
 * Single post view (/:slug)
 *
@@ -16,6 +18,11 @@ import {ShareButtons } from '../components/ShareButton'
 */
 const Post = ({ data, location }) => {
     const post = data.ghostPost
+    const postFeatureImage = get(
+        post,
+        `localFeatureImage.childImageSharp.fluid`,
+        null
+    );
     let disqusConfig = {
         ur:url.resolve(config.siteUrl, location.pathname),
         identifier: post.id,
@@ -36,11 +43,11 @@ const Post = ({ data, location }) => {
                     <article className="content">
                         { post.feature_image ?
                             <figure className="post-feature-image">
-                                <img src={ post.feature_image } alt={ post.title } />
+                                <Img  fluid={postFeatureImage} alt={ post.title } />
                             </figure> : null }
                             <div >
                         {/* <CommentCount config={disqusConfig} placeholder={'...'} /> */}
-                       <ShareButtons twitterHandle="aymericw" url={url.resolve(config.siteUrl, location.pathname)} title={post.title} />
+                       
                       <br/>
                        </div>
                         <section className="post-full-content">
@@ -53,6 +60,7 @@ const Post = ({ data, location }) => {
                                 dangerouslySetInnerHTML={{ __html: post.html }}
                             />
                         </section>
+                        <ShareButtons twitterHandle="aymericw" url={url.resolve(config.siteUrl, location.pathname)} title={post.title} />
                         <Disqus config={disqusConfig} />
                     </article>
                     
@@ -70,7 +78,7 @@ Post.propTypes = {
             codeinjection_styles: PropTypes.object,
             title: PropTypes.string.isRequired,
             html: PropTypes.string.isRequired,
-            feature_image: PropTypes.string,
+            localFeatureImage: PropTypes.object,
         }).isRequired,
     }).isRequired,
     location: PropTypes.object.isRequired,
@@ -82,6 +90,16 @@ export const postQuery = graphql`
     query($slug: String!) {
         ghostPost(slug: { eq: $slug }) {
             ...GhostPostFields
+            localFeatureImage {
+                childImageSharp {
+                    fluid( maxHeight: 500) {
+                        aspectRatio
+                        src
+                        srcSet
+                        sizes
+                    }
+                }
+            }
         }
     }
 `

@@ -546,7 +546,42 @@ h6 {
     max-width: 720px;
     margin: 0 auto;
     background: #fff;
+    position: relative;
+    margin: 0 auto;
+    @media (max-width: 1170px) {
+        padding: 5vw 7vw 0;
+      }
+      @media (max-width: 800px) {
+        font-size: 1.9rem;
+      }
+
+   
+    
 }
+
+  
+.post-feature-image {
+    margin: 0 -10vw -165px;
+    height: 800px;
+    background: center center;
+    background-size: cover;
+    border-radius: 5px;
+    @media (max-width: 1170px) {
+      margin: 0 -4vw -100px;
+      height: 600px;
+      border-radius: 0;
+    }
+    @media (max-width: 800px) {
+      height: 400px;
+    }
+    @media (max-width: 500px) {
+      margin-bottom: 4vw;
+      height: 350px;
+    }
+  
+}
+
+
 
 .post-feature-image img {
     margin: 0 0 3vw;
