@@ -562,7 +562,7 @@ h6 {
   
 .post-feature-image {
     margin: 0 -10vw -165px;
-    height: 800px;
+    max-height:800px;
     background: center center;
     background-size: cover;
     border-radius: 5px;
