@@ -844,10 +844,10 @@ h6 {
 
 .post-card-image {
     margin: 0 0 10px 0;
-    width: auto;
+    /*width: auto;
     height: 200px;
-    background: var(--color-secondary) no-repeat center center;
-    background-size: cover;
+     background: var(--color-secondary) no-repeat center center;
+    background-size: cover; */
 }
 
 .post-card-footer {
