@@ -1,8 +1,7 @@
 name: CI
 
 on: [push, repository_dispatch]
-  branches:
-    - main
+
 jobs:
   build:
 
