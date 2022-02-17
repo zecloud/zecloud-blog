@@ -21,10 +21,12 @@ jobs:
       run: echo Hello, world!
     - name: Setup Node.js for use with actions
       uses: actions/setup-node@v2.5.1
+      with:
+        node-version: 14.5
     - name: Install dependencies
       run: yarn install --prod --pure-lockfile
     - name: Build Gatsby Site
-      uses: fweinaug/gatsby-cli-github-action@v1.0.0
+      uses: fweinaug/gatsby-cli-github-action@9891a27abedf92c076d19b0d556d4971587ea5c1
       env:
           GATSBY_PORTAL_URL: ${{ secrets.GHOST_API_URL }}
           GHOST_API_URL: ${{ secrets.GHOST_API_URL }}
