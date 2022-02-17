@@ -20,7 +20,7 @@ jobs:
     - name: Run a one-line script
       run: echo Hello, world!
     - name: Setup Node.js for use with actions
-      uses: actions/setup-node@v2.1.2
+      uses: actions/setup-node@v2.5.1
     - name: Install dependencies
       run: yarn install --prod --pure-lockfile
     - name: Build Gatsby Site
