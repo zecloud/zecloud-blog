@@ -21,8 +21,6 @@ jobs:
       run: echo Hello, world!
     - name: Setup Node.js for use with actions
       uses: actions/setup-node@v2.5.1
-      with:
-        node-version: 14.5
     - name: Install dependencies
       run: yarn install --prod --pure-lockfile
     - name: Build Gatsby Site
