@@ -119,7 +119,7 @@ const DefaultLayoutSettingsQuery = props => (
                         }
                     }
                 }
-                file(relativePath: {eq: "ghost-icon.png"}) {
+                file(relativePath: {eq: "zecloud-icon.png"}) {
                     childImageSharp {
                         fixed(width: 30, height: 30) {
                             ...GatsbyImageSharpFixed
