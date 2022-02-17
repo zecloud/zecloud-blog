@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: yarn install --prod --pure-lockfile
     - name: Build Gatsby Site
-      uses: jzweifel/gatsby-cli-github-action@master
+      uses: theWhiteWulfy/gatsby-cli-github-action@2.0.c
       env:
           GATSBY_PORTAL_URL: ${{ secrets.GHOST_API_URL }}
           GHOST_API_URL: ${{ secrets.GHOST_API_URL }}
