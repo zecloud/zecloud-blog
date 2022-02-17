@@ -22,13 +22,14 @@ const DefaultLayout = ({ data, children, bodyClass, isHome }) => {
     const site = data.allGhostSettings.edges[0].node
     const twitterUrl = site.twitter ? `https://twitter.com/${site.twitter.replace(/^@/, ``)}` : null
     const facebookUrl = site.facebook ? `https://www.facebook.com/${site.facebook.replace(/^\//, ``)}` : null
-
     return (
         <>
             <Helmet>
                 <html lang={site.lang} />
                 <style type="text/css">{`${site.codeinjection_styles}`}</style>
+                <script defer src="https://unpkg.com/@tryghost/portal@latest/umd/portal.min.js" data-ghost={`${process.env.GATSBY_PORTAL_URL}`}></script>
                 <body className={bodyClass} />
+               
             </Helmet>
 
             <div className="viewport">
