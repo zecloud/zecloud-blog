@@ -4,7 +4,7 @@ import { graphql } from 'gatsby'
 
 import { Layout, PostCard, Pagination } from '../components/common'
 import { MetaData } from '../components/common/meta'
-import { get } from 'lodash';
+import { getImage } from "gatsby-plugin-image";
 /**
 * Main index page (home page)
 *
@@ -15,7 +15,7 @@ import { get } from 'lodash';
 */
 const Index = ({ data, location, pageContext }) => {
     const posts = data.allGhostPost.edges
-
+    console.log(data)
     return (
         <>
             <MetaData location={location} />
@@ -25,10 +25,7 @@ const Index = ({ data, location, pageContext }) => {
                         {posts.map(({ node }) => (
                            
                             // The tag below includes the markup for each post - components/common/PostCard.js
-                            <PostCard key={node.id} post={node}  featuredImage={ get(
-                                node,
-                                `localFeatureImage.childImageSharp.fluid`,
-                                null)} />
+                            <PostCard key={node.id} post={node}  featuredImage={ getImage(node.localFeatureImage)} />
                         ))}
                     </section>
                     <Pagination pageContext={pageContext} />
@@ -52,32 +49,27 @@ export default Index
 
 // This page query loads all posts sorted descending by published date
 // The `limit` and `skip` values are used for pagination
-export const pageQuery = graphql`
-  query GhostPostQuery($limit: Int!, $skip: Int!) {
-    allGhostPost(
-        sort: { order: DESC, fields: [published_at] },
-        limit: $limit,
-        skip: $skip
-    ) {
-      edges {
-        node {
-          ...GhostPostFields
-          localFeatureImage {
-            childImageSharp {
-                fluid(
-                    maxHeight: 200,
-                    maxWidth:300,
-                    cropFocus: CENTER
-                ) {
-                    aspectRatio
-                    src
-                    srcSet
-                    sizes
-                }
-            }
-        }
+export const pageQuery = graphql`query GhostPostQuery($limit: Int!, $skip: Int!) {
+  allGhostPost(
+    sort: {order: DESC, fields: [published_at]}
+    limit: $limit
+    skip: $skip
+  ) {
+    edges {
+      node {
+        ...GhostPostFields
+        localFeatureImage {
+          childImageSharp {
+            gatsbyImageData(
+              height: 200
+              width: 300
+              placeholder: BLURRED
+              transformOptions: {cropFocus: CENTER}
+              layout: CONSTRAINED
+            )
+          }
         }
       }
     }
   }
-`
+}`

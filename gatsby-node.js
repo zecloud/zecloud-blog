@@ -6,6 +6,16 @@ const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
  * Here is the place where Gatsby creates the URLs for all the
  * posts, tags, pages and authors that we fetched from the Ghost site.
  */
+exports.createSchemaCustomization = ({ actions }) => {
+    const { createTypes } = actions;
+  
+    // creates a relationship between GhostPost and the File node for the optimized image
+    createTypes(`
+      type GhostPost implements Node {
+        localFeatureImage: File @link
+      }
+    `); // change "GhostPost" to whatever type you're using from your source plugin
+  };
 exports.createPages = async ({ graphql, actions }) => {
     const { createPage } = actions
 
@@ -174,20 +184,31 @@ exports.onCreateNode = async ({
         return;
     }
 
-    const { createNode } = actions;
-
-    // Download image and create a File node with gatsby-transformer-sharp.
-    const fileNode = await createRemoteFileNode({
-        url: node.feature_image,
-        store,
-        cache,
-        createNode,
-        parentNodeId: node.id,
-        createNodeId
-    });
-
-    if (fileNode) {
-        // Link File node to GhostPost node at field image.
-        node.localFeatureImage___NODE = fileNode.id;
+    const { createNode,createNodeField } = actions;
+    if(node.feature_image !== null){
+        // Download image and create a File node with gatsby-transformer-sharp.
+        const fileNode = await createRemoteFileNode({
+            url: node.feature_image,
+            store,
+            cache,
+            createNode,
+            parentNodeId: node.id,
+            createNodeId
+        });
+        if (fileNode) {
+            // Link File node to GhostPost node at field image.
+            //createNodeField({ node, name: "localFeatureImage", value: fileNode.id });
+            node.localFeatureImage = fileNode.id;
+        }
     }
+
+    
 };
+
+// exports.onCreateWebpackConfig = ({ stage, actions }) => {
+//     actions.setWebpackConfig({
+//         resolve: {
+//             fallback: { url: require.resolve("url/") },
+//         },
+//     });
+// };

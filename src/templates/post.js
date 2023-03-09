@@ -10,6 +10,7 @@ import { Disqus, CommentCount } from 'gatsby-plugin-disqus'
 import {ShareButtons } from '../components/ShareButton'
 import Img from 'gatsby-image';
 import { get } from 'lodash';
+import { getImage,StaticImage } from "gatsby-plugin-image";
 /**
 * Single post view (/:slug)
 *
@@ -18,11 +19,7 @@ import { get } from 'lodash';
 */
 const Post = ({ data, location }) => {
     const post = data.ghostPost
-    const postFeatureImage = get(
-        post,
-        `localFeatureImage.childImageSharp.fluid`,
-        null
-    );
+    console.log(data)
     let disqusConfig = {
         ur:url.resolve(config.siteUrl, location.pathname),
         identifier: post.id,
@@ -41,10 +38,15 @@ const Post = ({ data, location }) => {
             <Layout>
                 <div className="container">
                     <article className="content">
-                        { post.feature_image ?
+                        { post.feature_image ?(
                             <figure className="post-feature-image">
-                                <Img  fluid={postFeatureImage} alt={ post.title } />
-                            </figure> : null }
+                               
+                                <img
+                                    src={post.feature_image}
+                                    alt={post.title}
+                                />
+                            </figure>
+                        ) : null }
                             <div >
                         {/* <CommentCount config={disqusConfig} placeholder={'...'} /> */}
                        
@@ -78,7 +80,7 @@ Post.propTypes = {
             codeinjection_styles: PropTypes.object,
             title: PropTypes.string.isRequired,
             html: PropTypes.string.isRequired,
-            localFeatureImage: PropTypes.object,
+            feature_image: PropTypes.string
         }).isRequired,
     }).isRequired,
     location: PropTypes.object.isRequired,
@@ -92,14 +94,20 @@ export const postQuery = graphql`
             ...GhostPostFields
             localFeatureImage {
                 childImageSharp {
-                    fluid( maxHeight: 500) {
-                        aspectRatio
-                        src
-                        srcSet
-                        sizes
-                    }
+                  gatsbyImageData(
+                    height: 200
+                    width: 300
+                    placeholder: BLURRED
+                    transformOptions: {cropFocus: CENTER}
+                    layout: CONSTRAINED
+                  )
                 }
-            }
+              }
         }
     }
 `
+            // localFeatureImage {
+            //     childImageSharp {
+            //       gatsbyImageData(height: 500, placeholder: BLURRED, layout: FULL_WIDTH)
+            //     }
+            //   }s

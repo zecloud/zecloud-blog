@@ -57,6 +57,7 @@ module.exports = {
                 name: `images`,
             },
         },
+        `gatsby-plugin-image`,
         `gatsby-plugin-sharp`,
         `gatsby-transformer-sharp`,
         {
@@ -187,14 +188,14 @@ module.exports = {
         `gatsby-plugin-react-helmet`,
         `gatsby-plugin-force-trailing-slashes`,
         `gatsby-plugin-offline`,
-        {
-            resolve: `gatsby-plugin-google-analytics`,
-            options: {
-              // replace "UA-XXXXXXXXX-X" with your own Tracking ID
-              trackingId: "UA-7283278-1",
-            },
-          }
-          ,
+        // {
+        //     resolve: `gatsby-plugin-google-analytics`,
+        //     options: {
+        //       // replace "UA-XXXXXXXXX-X" with your own Tracking ID
+        //       trackingId: "UA-7283278-1",
+        //     },
+        //   }
+        //   ,
           {
             resolve: `gatsby-plugin-disqus`,
             options: {
