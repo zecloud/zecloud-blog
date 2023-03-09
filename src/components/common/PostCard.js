@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 import { Tags } from '@tryghost/helpers-gatsby'
 import { readingTime as readingTimeHelper } from '@tryghost/helpers'
-import Img from 'gatsby-image';
+import { GatsbyImage } from "gatsby-plugin-image";
 
 const PostCard = ({ post,featuredImage }) => {
     const url = `/${post.slug}/`
@@ -12,13 +12,9 @@ const PostCard = ({ post,featuredImage }) => {
     return (
         <Link to={url} className="post-card">
             <header className="post-card-header">
-                {post.feature_image &&
-                    <div className="post-card-image">
-                        <Img
-                        className="post-card__image"
-                        fluid={featuredImage}
-                        alt={post.title}
-                    />
+                {post.feature_image &&                    
+                <div className="post-card-image">
+                        <GatsbyImage image={featuredImage} className="post-card__image" alt={post.title} />
                         </div>}
                 {post.tags && <div className="post-card-tags"> <Tags post={post} visibility="public" autolink={false} /></div>}
                 {post.featured && <span>Featured</span>}
@@ -40,7 +36,7 @@ const PostCard = ({ post,featuredImage }) => {
                 </div>
             </footer>
         </Link>
-    )
+    );
 }
 
 PostCard.propTypes = {
