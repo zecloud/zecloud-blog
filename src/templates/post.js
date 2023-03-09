@@ -8,9 +8,7 @@ import { Layout } from '../components/common'
 import { MetaData } from '../components/common/meta'
 import { Disqus, CommentCount } from 'gatsby-plugin-disqus'
 import {ShareButtons } from '../components/ShareButton'
-import Img from 'gatsby-image';
-import { get } from 'lodash';
-import { getImage,StaticImage } from "gatsby-plugin-image";
+import { getImage,GatsbyImage } from "gatsby-plugin-image";
 /**
 * Single post view (/:slug)
 *
@@ -19,7 +17,9 @@ import { getImage,StaticImage } from "gatsby-plugin-image";
 */
 const Post = ({ data, location }) => {
     const post = data.ghostPost
+    const postFeatureImage =getImage(data.ghostPost.localFeatureImage)
     console.log(data)
+
     let disqusConfig = {
         ur:url.resolve(config.siteUrl, location.pathname),
         identifier: post.id,
@@ -38,15 +38,10 @@ const Post = ({ data, location }) => {
             <Layout>
                 <div className="container">
                     <article className="content">
-                        { post.feature_image ?(
-                            <figure className="post-feature-image">
-                               
-                                <img
-                                    src={post.feature_image}
-                                    alt={post.title}
-                                />
-                            </figure>
-                        ) : null }
+                       { post.feature_image ?
+                        <figure className="post-feature-image">
+                            <GatsbyImage image={postFeatureImage} alt={ post.title } />
+                        </figure> : null }
                             <div >
                         {/* <CommentCount config={disqusConfig} placeholder={'...'} /> */}
                        
@@ -91,23 +86,14 @@ export default Post
 export const postQuery = graphql`
     query($slug: String!) {
         ghostPost(slug: { eq: $slug }) {
+              localFeatureImage {
+                    childImageSharp {
+                      gatsbyImageData(height: 500,aspectRatio:2.5,placeholder: BLURRED, transformOptions:{fit: COVER})
+                    }
+                  }
             ...GhostPostFields
-            localFeatureImage {
-                childImageSharp {
-                  gatsbyImageData(
-                    height: 200
-                    width: 300
-                    placeholder: BLURRED
-                    transformOptions: {cropFocus: CENTER}
-                    layout: CONSTRAINED
-                  )
-                }
-              }
+
         }
     }
 `
-            // localFeatureImage {
-            //     childImageSharp {
-            //       gatsbyImageData(height: 500, placeholder: BLURRED, layout: FULL_WIDTH)
-            //     }
-            //   }s
+

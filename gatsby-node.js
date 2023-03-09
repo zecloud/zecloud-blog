@@ -2,18 +2,22 @@ const path = require(`path`)
 const { postsPerPage } = require(`./src/utils/siteConfig`)
 const { paginate } = require(`gatsby-awesome-pagination`)
 const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
+const camelCase = require(`camelcase`)
 /**
  * Here is the place where Gatsby creates the URLs for all the
  * posts, tags, pages and authors that we fetched from the Ghost site.
  */
+
+
 exports.createSchemaCustomization = ({ actions }) => {
     const { createTypes } = actions;
   
     // creates a relationship between GhostPost and the File node for the optimized image
     createTypes(`
       type GhostPost implements Node {
-        localFeatureImage: File @link
+        localFeatureImage: File @link(from: "fields.localFeatureImage")
       }
+      
     `); // change "GhostPost" to whatever type you're using from your source plugin
   };
 exports.createPages = async ({ graphql, actions }) => {
@@ -170,40 +174,91 @@ exports.createPages = async ({ graphql, actions }) => {
         },
     })
 }
+async function createLocalImagesNodes(nodeTypes, gatsbyNodeHelpers) {
+    const {
+        node,
+        actions,
+        store,
+        reporter,
+        createNodeId,
+        cache,
+    } = gatsbyNodeHelpers
 
-exports.onCreateNode = async ({
-    node,
-    actions,
-    store,
-    createNodeId,
-    cache
-}) => {
-    // Check that we are modifying right node types.
-    const nodeTypes = [`GhostPost`, `GhostPage`];
-    if (!nodeTypes.includes(node.internal.type)) {
-        return;
+    const imgNode = nodeTypes.filter(item => item.type === node.internal.type) // leave if node type does not match
+
+    if (imgNode.length === 0) {
+        return
     }
 
-    const { createNode,createNodeField } = actions;
-    if(node.feature_image !== null){
-        // Download image and create a File node with gatsby-transformer-sharp.
-        const fileNode = await createRemoteFileNode({
-            url: node.feature_image,
+    const allImgTags = imgNode[0].imgTags.filter(item => node[item] !== null && node[item] !== undefined) // leave if image field is empty
+
+    if (allImgTags.length === 0) {
+        return
+    }
+
+    const { createNode, createNodeField } = actions
+
+    const promises = allImgTags.map((tag) => {
+        const imgUrl = node[tag] ? node[tag].replace(/^\/\//, `https://`) : ``
+
+        return createRemoteFileNode({
+            url: imgUrl,
             store,
             cache,
             createNode,
             parentNodeId: node.id,
-            createNodeId
-        });
-        if (fileNode) {
-            // Link File node to GhostPost node at field image.
-            //createNodeField({ node, name: "localFeatureImage", value: fileNode.id });
-            node.localFeatureImage = fileNode.id;
-        }
+            createNodeId,
+        })
+    })
+
+    let fileNodes
+
+    try {
+        fileNodes = await Promise.all(promises)
+    } catch (err) {
+        reporter.error(`Error processing images ${node.absolutePath ? `file ${node.absolutePath}` : `in node ${node.id}`}:\n ${err}`)
     }
 
+    if (fileNodes) {
+        // eslint-disable-next-line array-callback-return
+        fileNodes.map((fileNode, i) => {
+            //const id = `local${camelCase(allImgTags[i], { pascalCase: true })}`
+            //node[id] = fileNode.id
+            createNodeField({ node, name: `local${camelCase(allImgTags[i], { pascalCase: true })}`, value: fileNode.id })
+        })
+    }
+}
+
+exports.onCreateNode = async (gatsbyNodeHelpers) => {
+    const nodeTypes = [
+        {
+            type: `GhostAuthor`,
+            imgTags: [`cover_image`, `profile_image`],
+        },
+        {
+            type: `GhostTag`,
+            imgTags: [`feature_image`],
+        },
+        {
+            type: `GhostPost`,
+            imgTags: [`feature_image`],
+        },
+        {
+            type: `GhostPage`,
+            imgTags: [`feature_image`],
+        },
+        {
+            type: `GhostSettings`,
+            imgTags: [`logo`, `icon`, `cover_image`],
+        },
+    ]
+    if (nodeTypes.filter(item => item.type === gatsbyNodeHelpers.node.internal.type).length !== 0) {
+        createLocalImagesNodes(nodeTypes, gatsbyNodeHelpers)
+    }
     
-};
+
+    
+ };
 
 // exports.onCreateWebpackConfig = ({ stage, actions }) => {
 //     actions.setWebpackConfig({
