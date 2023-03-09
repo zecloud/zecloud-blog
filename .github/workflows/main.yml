@@ -16,26 +16,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
+    - uses: actions/checkout@v3
     - name: Setup Node.js for use with actions
-      uses: actions/setup-node@v2.5.1
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
     - name: Install dependencies
       run: yarn install --prod --pure-lockfile
     - name: Build Gatsby Site
-      uses: fweinaug/gatsby-cli-github-action@9891a27abedf92c076d19b0d556d4971587ea5c1
+      uses: zecloud/gatsby-cli-github-action@master
       env:
           GATSBY_PORTAL_URL: ${{ secrets.GHOST_API_URL }}
           GHOST_API_URL: ${{ secrets.GHOST_API_URL }}
           GHOST_CONTENT_API_KEY: ${{ secrets.GHOST_CONTENT_API_KEY }}
       with:
         gatsby-arg: build
-    - name: Deploy
-      uses: s0/git-publish-subdir-action@master
-      env:
-        REPO: git@github.com:zecloud/zecloud.github.io.git
-        BRANCH: master
-        FOLDER: public
-        SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY}}
+    # - name: Deploy
+    #   uses: s0/git-publish-subdir-action@master
+    #   env:
+    #     REPO: git@github.com:zecloud/zecloud.github.io.git
+    #     BRANCH: master
+    #     FOLDER: public
+    #     SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY}}
     
