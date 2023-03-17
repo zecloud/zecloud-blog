@@ -188,14 +188,14 @@ module.exports = {
         `gatsby-plugin-react-helmet`,
         `gatsby-plugin-force-trailing-slashes`,
         `gatsby-plugin-offline`,
-        // {
-        //     resolve: `gatsby-plugin-google-analytics`,
-        //     options: {
-        //       // replace "UA-XXXXXXXXX-X" with your own Tracking ID
-        //       trackingId: "UA-7283278-1",
-        //     },
-        //   }
-        //   ,
+        {
+            resolve : "gatsby-plugin-google-tagmanager",
+            includeInDevelopment: true,
+            options: {
+            id: "AW-10850084708",
+            defaultDataLayer: { platform: "gatsby" },
+            }
+        },
           {
             resolve: `gatsby-plugin-disqus`,
             options: {
