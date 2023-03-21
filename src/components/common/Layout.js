@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { Link, StaticQuery, graphql } from 'gatsby'
-import { GatsbyImage } from "gatsby-plugin-image";
+import { GatsbyImage,getImage, getSrc } from "gatsby-plugin-image";
 
 import { Navigation } from '.'
 import config from '../../utils/siteConfig'
@@ -20,6 +20,8 @@ import '../../styles/app.css'
 */
 const DefaultLayout = ({ data, children, bodyClass, isHome }) => {
     const site = data.allGhostSettings.edges[0].node
+    const coverImage =getImage(site.localCoverImage)
+    const srccoverImage= getSrc(site.localCoverImage)
     const twitterUrl = site.twitter ? `https://twitter.com/${site.twitter.replace(/^@/, ``)}` : null
     const facebookUrl = site.facebook ? `https://www.facebook.com/${site.facebook.replace(/^\//, ``)}` : null
     return <>
@@ -34,7 +36,9 @@ const DefaultLayout = ({ data, children, bodyClass, isHome }) => {
 
             <div className="viewport-top">
                 {/* The main header section on top of the screen */}
-                <header className="site-head" style={{ ...(site.cover_image && { backgroundImage: `url(${site.cover_image})` }) }}>
+                <div style={{ display: "grid" }}>
+                <header className="site-head" style={{ ...(site.cover_image && { backgroundImage: `url(${srccoverImage})` }) }}>
+               
                     <div className="container">
                         <div className="site-mast">
                             <div className="site-mast-left">
@@ -67,8 +71,9 @@ const DefaultLayout = ({ data, children, bodyClass, isHome }) => {
                             </div>
                         </nav>
                     </div>
+                
                 </header>
-
+                </div>
                 <main className="site-main">
                     {/* All the main content gets inserted here, index.js, post.js */}
                     {children}
@@ -112,6 +117,16 @@ const DefaultLayoutSettingsQuery = props => (
     edges {
       node {
         ...GhostSettingsFields
+        localCoverImage {
+            childImageSharp {
+                gatsbyImageData(transformOptions: {
+                    fit: COVER, cropFocus: ATTENTION
+                }
+                placeholder: BLURRED
+                formats: [AUTO, WEBP]
+                )
+            }
+          }
       }
     }
   }

@@ -17,7 +17,22 @@ exports.createSchemaCustomization = ({ actions }) => {
       type GhostPost implements Node {
         localFeatureImage: File @link(from: "fields.localFeatureImage")
       }
-      
+      type GhostPage implements Node {
+        localFeatureImage: File @link(from: "fields.localFeatureImage")
+      }
+      type GhostAuthor implements Node {
+        localCoverImage: File @link(from: "fields.localCoverImage")
+        localProfileImage: File @link(from: "fields.localProfileImage")
+      }
+      type GhostTag implements Node {
+        localFeatureImage: File @link(from: "fields.localFeatureImage")
+      }
+      type GhostSettings implements Node {
+        localCoverImage: File @link(from: "fields.localCoverImage")
+        localLogo: File @link(from: "fields.localLogo")
+        localIcon: File @link(from: "fields.localIcon")
+        accent_color: String
+      }
     `); // change "GhostPost" to whatever type you're using from your source plugin
   };
 exports.createPages = async ({ graphql, actions }) => {
