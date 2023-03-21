@@ -69,6 +69,19 @@ export const pageQuery = graphql`query GhostPostQuery($limit: Int!, $skip: Int!)
             )
           }
         }
+        primary_author{
+        localProfileImage{
+          childImageSharp {
+            gatsbyImageData(
+              height: 30
+              width: 30
+              placeholder: BLURRED
+              transformOptions: {cropFocus: CENTER}
+              layout: FIXED
+            )
+            }
+          }
+        }
       }
     }
   }

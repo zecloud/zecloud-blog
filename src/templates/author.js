@@ -4,6 +4,7 @@ import { graphql } from 'gatsby'
 
 import { Layout, PostCard, Pagination } from '../components/common'
 import { MetaData } from '../components/common/meta'
+import { GatsbyImage,getImage } from "gatsby-plugin-image";
 
 /**
 * Author page (/author/:slug)
@@ -16,7 +17,7 @@ const Author = ({ data, location, pageContext }) => {
     const posts = data.allGhostPost.edges
     const twitterUrl = author.twitter ? `https://twitter.com/${author.twitter.replace(/^@/, ``)}` : null
     const facebookUrl = author.facebook ? `https://www.facebook.com/${author.facebook.replace(/^\//, ``)}` : null
-
+    const profileImage = getImage(author.localProfileImage)
     return (
         <>
             <MetaData
@@ -37,7 +38,8 @@ const Author = ({ data, location, pageContext }) => {
                             </div>
                         </div>
                         <div className="author-header-image">
-                            {author.profile_image && <img src={author.profile_image} alt={author.name} />}
+                            
+                            {author.profile_image && <GatsbyImage image={profileImage}  alt={author.name} />}
                         </div>
                     </header>
                     <section className="post-feed">
@@ -79,6 +81,17 @@ export const pageQuery = graphql`
     query GhostAuthorQuery($slug: String!, $limit: Int!, $skip: Int!) {
         ghostAuthor(slug: { eq: $slug }) {
             ...GhostAuthorFields
+            localProfileImage{
+                childImageSharp {
+                  gatsbyImageData(
+                    height: 120
+                    width: 120
+                    placeholder: BLURRED
+                    transformOptions: {cropFocus: CENTER}
+                    layout: FIXED
+                  )
+                  }
+                }
         }
         allGhostPost(
             sort: { order: DESC, fields: [published_at] },
@@ -89,6 +102,19 @@ export const pageQuery = graphql`
             edges {
                 node {
                 ...GhostPostFields
+                primary_author{
+                    localProfileImage{
+                      childImageSharp {
+                        gatsbyImageData(
+                          height: 30
+                          width: 30
+                          placeholder: BLURRED
+                          transformOptions: {cropFocus: CENTER}
+                          layout: FIXED
+                        )
+                        }
+                      }
+                    }
                 }
             }
         }

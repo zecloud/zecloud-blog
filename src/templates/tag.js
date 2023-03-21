@@ -71,6 +71,19 @@ export const pageQuery = graphql`
             edges {
                 node {
                 ...GhostPostFields
+                primary_author{
+                    localProfileImage{
+                      childImageSharp {
+                        gatsbyImageData(
+                          height: 30
+                          width: 30
+                          placeholder: BLURRED
+                          transformOptions: {cropFocus: CENTER}
+                          layout: FIXED
+                        )
+                        }
+                      }
+                    }
                 }
             }
         }
