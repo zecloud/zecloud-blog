@@ -22,7 +22,7 @@ jobs:
       with:
         node-version: 18
     - name: Install dependencies
-      run: yarn install --prod --pure-lockfile
+      run: yarn add sharp --ignore-engines
     - name: Build Gatsby Site
       uses: zecloud/gatsby-cli-github-action@master
       env:
