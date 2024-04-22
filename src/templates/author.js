@@ -78,45 +78,45 @@ Author.propTypes = {
 export default Author
 
 export const pageQuery = graphql`
-    query GhostAuthorQuery($slug: String!, $limit: Int!, $skip: Int!) {
-        ghostAuthor(slug: { eq: $slug }) {
-            ...GhostAuthorFields
-            localProfileImage{
-                childImageSharp {
-                  gatsbyImageData(
-                    height: 120
-                    width: 120
-                    placeholder: BLURRED
-                    transformOptions: {cropFocus: CENTER}
-                    layout: FIXED
-                  )
-                  }
-                }
+query GhostAuthorQuery($slug: String!, $limit: Int!, $skip: Int!) {
+    ghostAuthor(slug: {eq: $slug}) {
+      ...GhostAuthorFields
+      localProfileImage {
+        childImageSharp {
+          gatsbyImageData(
+            height: 120
+            width: 120
+            placeholder: BLURRED
+            transformOptions: {cropFocus: CENTER}
+            layout: FIXED
+          )
         }
-        allGhostPost(
-            sort: { order: DESC, fields: [published_at] },
-            filter: {authors: {elemMatch: {slug: {eq: $slug}}}},
-            limit: $limit,
-            skip: $skip
-        ) {
-            edges {
-                node {
-                ...GhostPostFields
-                primary_author{
-                    localProfileImage{
-                      childImageSharp {
-                        gatsbyImageData(
-                          height: 30
-                          width: 30
-                          placeholder: BLURRED
-                          transformOptions: {cropFocus: CENTER}
-                          layout: FIXED
-                        )
-                        }
-                      }
-                    }
-                }
-            }
-        }
+      }
     }
+    allGhostPost(
+      sort: {published_at: DESC}
+      filter: {authors: {elemMatch: {slug: {eq: $slug}}}}
+      limit: $limit
+      skip: $skip
+    ) {
+      edges {
+        node {
+          ...GhostPostFields
+          primary_author {
+            localProfileImage {
+              childImageSharp {
+                gatsbyImageData(
+                  height: 30
+                  width: 30
+                  placeholder: BLURRED
+                  transformOptions: {cropFocus: CENTER}
+                  layout: FIXED
+                )
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 `
