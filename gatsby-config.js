@@ -115,7 +115,7 @@ module.exports = {
             },
         },
         {
-            resolve: `gatsby-plugin-advanced-sitemap`,
+            resolve: `gatsby-plugin-advanced-sitemap-v5`,
             options: {
                 query: `
                 {

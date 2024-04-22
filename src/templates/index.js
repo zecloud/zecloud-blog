@@ -50,11 +50,7 @@ export default Index
 // This page query loads all posts sorted descending by published date
 // The `limit` and `skip` values are used for pagination
 export const pageQuery = graphql`query GhostPostQuery($limit: Int!, $skip: Int!) {
-  allGhostPost(
-    sort: {order: DESC, fields: [published_at]}
-    limit: $limit
-    skip: $skip
-  ) {
+  allGhostPost(sort: {published_at: DESC}, limit: $limit, skip: $skip) {
     edges {
       node {
         ...GhostPostFields
@@ -69,16 +65,16 @@ export const pageQuery = graphql`query GhostPostQuery($limit: Int!, $skip: Int!)
             )
           }
         }
-        primary_author{
-        localProfileImage{
-          childImageSharp {
-            gatsbyImageData(
-              height: 30
-              width: 30
-              placeholder: BLURRED
-              transformOptions: {cropFocus: CENTER}
-              layout: FIXED
-            )
+        primary_author {
+          localProfileImage {
+            childImageSharp {
+              gatsbyImageData(
+                height: 30
+                width: 30
+                placeholder: BLURRED
+                transformOptions: {cropFocus: CENTER}
+                layout: FIXED
+              )
             }
           }
         }
