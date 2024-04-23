@@ -350,6 +350,10 @@ svg,
 video {
     vertical-align: middle;
 }
+iframe {
+    min-width: 100%;
+    min-height: 416.69px;
+}
 
 fieldset {
     margin: 0;
