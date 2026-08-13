@@ -6,6 +6,7 @@ on:
       - master
   repository_dispatch:
     types: [build-application]
+  workflow_dispatch:
       
 # on: [push, repository_dispatch]
 #   branches:
