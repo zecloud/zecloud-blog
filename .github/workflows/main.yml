@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup Node.js for use with actions
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 18
     - name: Install dependencies
@@ -33,10 +33,12 @@ jobs:
       with:
         gatsby-arg: build
     - name: Deploy
-      uses: s0/git-publish-subdir-action@master
+      uses: cpina/github-action-push-to-another-repository@v1.7.3
       env:
-        REPO: git@github.com:zecloud/zecloud.github.io.git
-        BRANCH: master
-        FOLDER: public
-        SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY}}
+        API_TOKEN_GITHUB: ${{ secrets.DEPLOY_TOKEN }}
+      with:
+        source-directory: public
+        destination-github-username: zecloud
+        destination-repository-name: zecloud.github.io
+        target-branch: master
     
