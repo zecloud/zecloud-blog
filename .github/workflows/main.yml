@@ -32,7 +32,7 @@ jobs:
       with:
         gatsby-arg: build
     - name: Deploy
-      uses: cpina/github-action-push-to-another-repository@main
+      uses: cpina/github-action-push-to-another-repository@v1.7.3
       env:
         API_TOKEN_GITHUB: ${{ secrets.DEPLOY_TOKEN }}
       with:
